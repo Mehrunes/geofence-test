@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Codex" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Dabrowskiego geofences slow walk</name>
+    <desc>Trasa przez 20 geofencow na ul. Dabrowskiego w Poznaniu od Mostu Teatralnego, spokojny marsz (~3.8 km/h).</desc>
+    <time>2026-02-24T10:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Dabrowskiego geofences (slow walk)</name>
+    <trkseg>
+      <trkpt lat="52.410668" lon="16.912540"><time>2026-02-24T10:00:00Z</time></trkpt>
+      <trkpt lat="52.411266" lon="16.910345"><time>2026-02-24T10:02:00Z</time></trkpt>
+      <trkpt lat="52.411766" lon="16.908070"><time>2026-02-24T10:04:00Z</time></trkpt>
+      <trkpt lat="52.412260" lon="16.905793"><time>2026-02-24T10:06:00Z</time></trkpt>
+      <trkpt lat="52.412756" lon="16.903517"><time>2026-02-24T10:08:00Z</time></trkpt>
+      <trkpt lat="52.413255" lon="16.901242"><time>2026-02-24T10:10:00Z</time></trkpt>
+      <trkpt lat="52.413760" lon="16.898970"><time>2026-02-24T10:12:00Z</time></trkpt>
+      <trkpt lat="52.414349" lon="16.896761"><time>2026-02-24T10:14:00Z</time></trkpt>
+      <trkpt lat="52.414796" lon="16.894460"><time>2026-02-24T10:16:00Z</time></trkpt>
+      <trkpt lat="52.415299" lon="16.892188"><time>2026-02-24T10:18:00Z</time></trkpt>
+      <trkpt lat="52.415856" lon="16.889961"><time>2026-02-24T10:20:00Z</time></trkpt>
+      <trkpt lat="52.416277" lon="16.887650"><time>2026-02-24T10:22:00Z</time></trkpt>
+      <trkpt lat="52.416775" lon="16.885375"><time>2026-02-24T10:24:00Z</time></trkpt>
+      <trkpt lat="52.417278" lon="16.883102"><time>2026-02-24T10:26:00Z</time></trkpt>
+      <trkpt lat="52.418025" lon="16.881019"><time>2026-02-24T10:28:00Z</time></trkpt>
+      <trkpt lat="52.418819" lon="16.878979"><time>2026-02-24T10:30:00Z</time></trkpt>
+      <trkpt lat="52.419612" lon="16.876937"><time>2026-02-24T10:32:00Z</time></trkpt>
+      <trkpt lat="52.420384" lon="16.874875"><time>2026-02-24T10:34:00Z</time></trkpt>
+      <trkpt lat="52.421354" lon="16.873098"><time>2026-02-24T10:36:00Z</time></trkpt>
+      <trkpt lat="52.422043" lon="16.870973"><time>2026-02-24T10:38:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
