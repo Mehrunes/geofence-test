@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:lockito="https://lockito-app.com/import-gpx-2.xsd" creator="Lockito 2.0" version="3000037">
+  <metadata>
+    <name>Dabrowskiego geofences slow walk</name>
+    <extensions>
+      <lockito:loop>false</lockito:loop>
+    </extensions>
+  </metadata>
+  <wpt lat="52.410668" lon="16.91254"/>
+  <wpt lat="52.422043" lon="16.870973"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="52.410668" lon="16.91254">
+        <extensions>
+          <lockito:speed>4.9054804</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.411266" lon="16.910345">
+        <extensions>
+          <lockito:speed>4.9350104</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.411766" lon="16.90807">
+        <extensions>
+          <lockito:speed>4.9320703</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.41226" lon="16.905793">
+        <extensions>
+          <lockito:speed>4.932335</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.412756" lon="16.903517">
+        <extensions>
+          <lockito:speed>4.9337354</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.413255" lon="16.901242">
+        <extensions>
+          <lockito:speed>4.9347286</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.41376" lon="16.89897">
+        <extensions>
+          <lockito:speed>4.9192266</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.414349" lon="16.896761">
+        <extensions>
+          <lockito:speed>4.9282618</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.414796" lon="16.89446">
+        <extensions>
+          <lockito:speed>4.9322996</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.415299" lon="16.892188">
+        <extensions>
+          <lockito:speed>4.9113555</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.415856" lon="16.889961">
+        <extensions>
+          <lockito:speed>4.9220862</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.416277" lon="16.88765">
+        <extensions>
+          <lockito:speed>4.932261</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.416775" lon="16.885375">
+        <extensions>
+          <lockito:speed>4.934024</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.417278" lon="16.883102">
+        <extensions>
+          <lockito:speed>4.928979</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.418025" lon="16.881019">
+        <extensions>
+          <lockito:speed>4.9358635</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.418819" lon="16.878979">
+        <extensions>
+          <lockito:speed>4.9374537</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.419612" lon="16.876937">
+        <extensions>
+          <lockito:speed>4.9349275</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.420384" lon="16.874875">
+        <extensions>
+          <lockito:speed>4.861994</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.421354" lon="16.873098">
+        <extensions>
+          <lockito:speed>4.9091287</lockito:speed>
+        </extensions>
+      </trkpt>
+      <trkpt lat="52.422043" lon="16.870973"/>
+      <extensions>
+        <lockito:speed>recorded</lockito:speed>
+        <lockito:accuracy>random:2.0:4.0</lockito:accuracy>
+        <lockito:altitude>fixed:0.0</lockito:altitude>
+      </extensions>
+    </trkseg>
+  </trk>
+</gpx>
