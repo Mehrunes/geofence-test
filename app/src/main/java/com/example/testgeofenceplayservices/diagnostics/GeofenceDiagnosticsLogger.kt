@@ -14,6 +14,7 @@ import kotlin.math.abs
 object GeofenceDiagnosticsLogger {
 
     private const val TAG = "GeofenceDiagnostics"
+    private var hasLoggedSessionInfo = false
 
     data class RegistrationParams(
         val initialTrigger: Int,
@@ -21,11 +22,15 @@ object GeofenceDiagnosticsLogger {
         val expirationDurationMs: Long,
     )
 
-    fun logEnvironmentSnapshot(context: Context, reason: String) {
+    @Synchronized
+    fun logSessionInfoOnce(context: Context, reason: String) {
+        if (hasLoggedSessionInfo) return
+        hasLoggedSessionInfo = true
+
         val playServicesInfo = PlayServicesVersionProvider.getPlayServicesInfo(context)
         Log.i(
             TAG,
-            "environment reason=$reason " +
+            "session_start reason=$reason " +
                 "playServicesVersionName=${playServicesInfo?.versionName ?: "unknown"} " +
                 "playServicesVersionCode=${playServicesInfo?.versionCode ?: "unknown"} " +
                 "androidApi=${Build.VERSION.SDK_INT} " +
@@ -35,11 +40,9 @@ object GeofenceDiagnosticsLogger {
     }
 
     fun logGeofenceRegistrationRequest(
-        context: Context,
         geofenceDefinitions: List<PoznanDabrowskiegoGeofences.GeofenceDefinition>,
         params: RegistrationParams,
     ) {
-        logEnvironmentSnapshot(context, reason = "registration_request")
         Log.i(
             TAG,
             "registration_request_summary count=${geofenceDefinitions.size} " +
@@ -78,57 +81,50 @@ object GeofenceDiagnosticsLogger {
     }
 
     fun logTriggerEventDiagnostics(
-        context: Context,
         transition: String,
         requestIds: List<String>,
         triggeringLocation: Location?,
         eventReceivedAtEpochMs: Long,
         eventReceivedElapsedRealtimeNanos: Long,
     ) {
-        logEnvironmentSnapshot(context, reason = "trigger_event")
         Log.i(
             TAG,
-            "trigger_event_summary transition=$transition " +
+            "trigger_event transition=$transition " +
                 "requestIds=${requestIds.ifEmpty { listOf("none") }.joinToString(",")} " +
-                "eventReceivedAtEpochMs=$eventReceivedAtEpochMs " +
-                "eventReceivedElapsedRealtimeNanos=$eventReceivedElapsedRealtimeNanos"
+                "receivedAtEpochMs=$eventReceivedAtEpochMs " +
+                "receivedElapsedRealtimeNanos=$eventReceivedElapsedRealtimeNanos"
         )
 
         if (triggeringLocation == null) {
-            Log.w(TAG, "trigger_event_location missing=true")
-            return
+            Log.w(TAG, "trigger_event location unavailable")
         }
-
-        val accuracy =
-            if (triggeringLocation.hasAccuracy()) formatFloat(triggeringLocation.accuracy) else "n/a"
-        Log.i(
-            TAG,
-            "trigger_event_location provider=${triggeringLocation.provider} " +
-                "lat=${formatDouble(triggeringLocation.latitude)} " +
-                "lon=${formatDouble(triggeringLocation.longitude)} " +
-                "accuracyMeters=$accuracy " +
-                "locationTimeEpochMs=${triggeringLocation.time}"
-        )
     }
 
-    fun logTriggeredGeofenceDistance(
-        requestId: String,
+    fun logTriggeredGeofenceEvent(
+        transition: String,
+        definition: PoznanDabrowskiegoGeofences.GeofenceDefinition,
+        triggeringLocation: Location,
         distanceMeters: Float,
-        radiusMeters: Float,
     ) {
+        val radiusMeters = definition.radiusMeters
         val inside = distanceMeters <= radiusMeters
-        val ratio = if (radiusMeters > 0f) distanceMeters / radiusMeters else Float.NaN
         val distanceToBoundaryMeters = abs(radiusMeters - distanceMeters)
         val status = if (inside) "INSIDE" else "OUTSIDE"
         val statusEmoji = if (inside) "✅" else "❌"
-        val boundaryLabel = if (inside) "insideByMeters" else "outsideByMeters"
+        val boundaryText =
+            if (inside) {
+                "inside geofence by ${formatFloat(distanceToBoundaryMeters)}m"
+            } else {
+                "outside geofence by ${formatFloat(distanceToBoundaryMeters)}m"
+            }
+        val accuracy =
+            if (triggeringLocation.hasAccuracy()) "${formatFloat(triggeringLocation.accuracy)}m" else "n/a"
         Log.i(
             TAG,
-            "trigger_event_distance $statusEmoji status=$status requestId=$requestId " +
-                "distanceToCenterMeters=${formatFloat(distanceMeters)} " +
-                "radiusMeters=${formatFloat(radiusMeters)} " +
-                "distanceToRadiusRatio=${formatFloat(ratio)} " +
-                "$boundaryLabel=${formatFloat(distanceToBoundaryMeters)}"
+            "$statusEmoji $transition ${definition.requestId}: " +
+                "geofence(lat=${formatDouble(definition.latitude)}, lon=${formatDouble(definition.longitude)}, radius=${formatFloat(radiusMeters)}m), " +
+                "triggered at location(lat=${formatDouble(triggeringLocation.latitude)}, lon=${formatDouble(triggeringLocation.longitude)}, accuracy=$accuracy, time=${triggeringLocation.time}), " +
+                "${formatFloat(distanceMeters)}m from center, $boundaryText ($status)"
         )
     }
 

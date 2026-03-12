@@ -46,7 +46,6 @@ class GeofenceManager(context: Context) {
             .build()
 
         GeofenceDiagnosticsLogger.logGeofenceRegistrationRequest(
-            context = appContext,
             geofenceDefinitions = geofenceDefinitions,
             params = GeofenceDiagnosticsLogger.RegistrationParams(
                 initialTrigger = initialTriggerMask,

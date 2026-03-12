@@ -30,7 +30,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAppStarted() {
         refreshTriggerEvents()
-        GeofenceDiagnosticsLogger.logEnvironmentSnapshot(appContext, reason = "app_start")
     }
 
     fun onTriggerEventsUpdated() {
@@ -39,6 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onStartGeofencingRequested() {
         shouldStartAfterPermission = true
+        GeofenceDiagnosticsLogger.logSessionInfoOnce(appContext, reason = "start_geofencing_click")
     }
 
     fun onForegroundPermissionDenied() {

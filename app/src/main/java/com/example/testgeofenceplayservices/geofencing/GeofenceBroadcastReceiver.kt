@@ -8,7 +8,6 @@ import com.example.testgeofenceplayservices.data.GeofenceTriggerEvent
 import com.example.testgeofenceplayservices.data.GeofenceTriggerEventStore
 import com.example.testgeofenceplayservices.diagnostics.GeofenceDiagnosticsLogger
 import com.google.android.gms.location.*
-import java.util.Locale
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
@@ -26,20 +25,11 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         val requestIds = geofencingEvent.triggeringGeofences
             ?.map { it.requestId }
             .orEmpty()
-        val idsWithDetails = if (requestIds.isEmpty()) {
-            "none"
-        } else {
-            requestIds.joinToString(separator = ", ") { requestId ->
-                formatGeofenceIdWithDetails(requestId)
-            }
-        }
         val triggeringLocation = geofencingEvent.triggeringLocation
         val eventReceivedAtEpochMs = System.currentTimeMillis()
         val eventReceivedElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
 
-        Log.i(TAG, "Geofence transition=$transition, ids=$idsWithDetails")
         GeofenceDiagnosticsLogger.logTriggerEventDiagnostics(
-            context = context,
             transition = transition,
             requestIds = requestIds,
             triggeringLocation = triggeringLocation,
@@ -54,17 +44,11 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
         requestIds.forEach { requestId ->
             logDistanceFromCenter(
-                context = context,
+                transition = transition,
                 requestId = requestId,
-                triggeringLatitude = triggeringLocation.latitude,
-                triggeringLongitude = triggeringLocation.longitude,
+                triggeringLocation = triggeringLocation,
             )
         }
-
-        Log.i(
-            TAG,
-            "Triggering location: ${formatLocationForLog(triggeringLocation)}"
-        )
 
         GeofenceTriggerEventStore.append(
             context = context,
@@ -89,10 +73,9 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun logDistanceFromCenter(
-        context: Context,
+        transition: String,
         requestId: String,
-        triggeringLatitude: Double,
-        triggeringLongitude: Double,
+        triggeringLocation: Location,
     ) {
         val definition = PoznanDabrowskiegoGeofences.findDefinition(requestId)
         if (definition == null) {
@@ -102,49 +85,23 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
         val distanceResult = FloatArray(1)
         Location.distanceBetween(
-            triggeringLatitude,
-            triggeringLongitude,
+            triggeringLocation.latitude,
+            triggeringLocation.longitude,
             definition.latitude,
             definition.longitude,
             distanceResult,
         )
         val distanceMeters = distanceResult[0]
-        val inside = distanceMeters <= definition.radiusMeters
-        val distanceToRadiusRatio =
-            if (definition.radiusMeters > 0f) distanceMeters / definition.radiusMeters else Float.NaN
-        val distanceFormatted = String.format(Locale.US, "%.2f", distanceMeters)
-        val ratioFormatted = String.format(Locale.US, "%.3f", distanceToRadiusRatio)
-        GeofenceDiagnosticsLogger.logTriggeredGeofenceDistance(
-            requestId = requestId,
+        GeofenceDiagnosticsLogger.logTriggeredGeofenceEvent(
+            transition = transition,
+            definition = definition,
+            triggeringLocation = triggeringLocation,
             distanceMeters = distanceMeters,
-            radiusMeters = definition.radiusMeters,
-        )
-
-        Log.i(
-            TAG,
-            "requestId=$requestId distanceMeters=$distanceFormatted " +
-                "radiusMeters=${definition.radiusMeters} " +
-                "distanceToRadiusRatio=$ratioFormatted inside=$inside"
         )
     }
 
     companion object {
 
         private const val TAG = "GeofenceReceiver"
-    }
-
-    private fun formatGeofenceIdWithDetails(requestId: String): String {
-        val definition = PoznanDabrowskiegoGeofences.findDefinition(requestId)
-            ?: return "$requestId(lat=unknown, lon=unknown, radius=unknown)"
-        val latitude = String.format(Locale.US, "%.6f", definition.latitude)
-        val longitude = String.format(Locale.US, "%.6f", definition.longitude)
-        val radius = String.format(Locale.US, "%.1f", definition.radiusMeters)
-        return "$requestId(lat=$latitude, lon=$longitude, radius=${radius}m)"
-    }
-
-    private fun formatLocationForLog(location: Location?): String {
-        if (location == null) return "null"
-        val accuracy = if (location.hasAccuracy()) location.accuracy.toString() else "n/a"
-        return "lat=${location.latitude}, lon=${location.longitude}, accuracy=$accuracy, time=${location.time}"
     }
 }
