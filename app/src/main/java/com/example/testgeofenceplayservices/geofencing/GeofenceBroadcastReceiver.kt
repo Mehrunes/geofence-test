@@ -77,7 +77,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         requestId: String,
         triggeringLocation: Location,
     ) {
-        val definition = PoznanDabrowskiegoGeofences.findDefinition(requestId)
+        val definition = PoznanGeofences.findDefinition(requestId)
         if (definition == null) {
             Log.w(TAG, "No geofence definition found for requestId=$requestId")
             return

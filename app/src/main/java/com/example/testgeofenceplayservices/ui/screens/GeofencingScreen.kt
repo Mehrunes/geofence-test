@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.testgeofenceplayservices.data.GeofenceTriggerEvent
-import com.example.testgeofenceplayservices.geofencing.PoznanDabrowskiegoGeofences
+import com.example.testgeofenceplayservices.geofencing.PoznanGeofences
 import com.example.testgeofenceplayservices.ui.format.formatEventTime
 import com.example.testgeofenceplayservices.ui.theme.TestGeofencePlayServicesTheme
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -50,7 +50,7 @@ private sealed interface MapOverlaySelection {
 fun GeofencingScreen(
     statusText: String,
     playServicesVersionText: String,
-    geofenceDefinitions: List<PoznanDabrowskiegoGeofences.GeofenceDefinition>,
+    geofenceDefinitions: List<PoznanGeofences.GeofenceDefinition>,
     triggerEvents: List<GeofenceTriggerEvent>,
     isUserLocationEnabled: Boolean,
     onStartClick: () -> Unit,
@@ -199,7 +199,7 @@ fun BackgroundLocationPermissionDialog(
 
 @Composable
 private fun GeofencingMap(
-    geofenceDefinitions: List<PoznanDabrowskiegoGeofences.GeofenceDefinition>,
+    geofenceDefinitions: List<PoznanGeofences.GeofenceDefinition>,
     triggerEvents: List<GeofenceTriggerEvent>,
     isUserLocationEnabled: Boolean,
     onOverlaySelected: (MapOverlaySelection?) -> Unit,
@@ -318,7 +318,7 @@ private fun TriggeringLocationInfoCard(
 
 @Composable
 private fun GeofenceInfoCard(
-    geofence: PoznanDabrowskiegoGeofences.GeofenceDefinition,
+    geofence: PoznanGeofences.GeofenceDefinition,
     isLastTriggered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -348,7 +348,7 @@ fun GeofencingScreenPreview() {
         GeofencingScreen(
             statusText = "Preview",
             playServicesVersionText = "260235035",
-            geofenceDefinitions = PoznanDabrowskiegoGeofences.getAllDefinitions(),
+            geofenceDefinitions = PoznanGeofences.getAllDefinitions(),
             triggerEvents = listOf(
                 GeofenceTriggerEvent(
                     geofenceRequestIds = listOf("dabrowskiego_5"),

@@ -2,7 +2,7 @@ package com.example.testgeofenceplayservices.geofencing
 
 import com.google.android.gms.location.Geofence
 
-object PoznanDabrowskiegoGeofences {
+object PoznanGeofences {
 
     data class GeofenceDefinition(
         val requestId: String,
@@ -18,6 +18,10 @@ object PoznanDabrowskiegoGeofences {
         52.413056 to 16.902419,
         52.413800 to 16.899006,
         52.414548 to 16.895593,
+        52.43871447 to 16.932027,
+        52.4408028 to 16.93179448,
+        52.435443179710134 to 16.92701340794936,
+        52.43363939360835 to 16.929675313549932
         /*        52.413760 to 16.898970,
                 52.414349 to 16.896761,
                 52.414796 to 16.894460,
@@ -65,7 +69,7 @@ object PoznanDabrowskiegoGeofences {
             val radius = radiiMeters[index % radiiMeters.size]
 
             GeofenceDefinition(
-                requestId = "dabrowskiego_${index + 1}",
+                requestId = "geofence_${index + 1}",
                 latitude = latitude,
                 longitude = longitude,
                 radiusMeters = radius,

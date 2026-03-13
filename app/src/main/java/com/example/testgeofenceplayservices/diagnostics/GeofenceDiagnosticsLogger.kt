@@ -5,7 +5,7 @@ import android.location.Location
 import android.os.Build
 import android.util.Log
 import com.example.testgeofenceplayservices.PlayServicesVersionProvider
-import com.example.testgeofenceplayservices.geofencing.PoznanDabrowskiegoGeofences
+import com.example.testgeofenceplayservices.geofencing.PoznanGeofences
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.GeofenceStatusCodes
 import java.util.Locale
@@ -40,7 +40,7 @@ object GeofenceDiagnosticsLogger {
     }
 
     fun logGeofenceRegistrationRequest(
-        geofenceDefinitions: List<PoznanDabrowskiegoGeofences.GeofenceDefinition>,
+        geofenceDefinitions: List<PoznanGeofences.GeofenceDefinition>,
         params: RegistrationParams,
     ) {
         Log.i(
@@ -102,7 +102,7 @@ object GeofenceDiagnosticsLogger {
 
     fun logTriggeredGeofenceEvent(
         transition: String,
-        definition: PoznanDabrowskiegoGeofences.GeofenceDefinition,
+        definition: PoznanGeofences.GeofenceDefinition,
         triggeringLocation: Location,
         distanceMeters: Float,
     ) {

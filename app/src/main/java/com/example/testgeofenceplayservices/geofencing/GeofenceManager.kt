@@ -15,8 +15,8 @@ class GeofenceManager(context: Context) {
         val message: String,
     )
 
-    val geofenceDefinitions: List<PoznanDabrowskiegoGeofences.GeofenceDefinition> by lazy {
-        PoznanDabrowskiegoGeofences.getAllDefinitions()
+    val geofenceDefinitions: List<PoznanGeofences.GeofenceDefinition> by lazy {
+        PoznanGeofences.getAllDefinitions()
     }
 
     private val appContext = context.applicationContext
@@ -37,7 +37,7 @@ class GeofenceManager(context: Context) {
     fun registerGeofences(
         onResult: (RegistrationResult) -> Unit,
     ) {
-        val geofences = PoznanDabrowskiegoGeofences.buildGeofences()
+        val geofences = PoznanGeofences.buildGeofences()
         val initialTriggerMask =
             GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_DWELL
         val geofencingRequest = GeofencingRequest.Builder()
@@ -49,8 +49,8 @@ class GeofenceManager(context: Context) {
             geofenceDefinitions = geofenceDefinitions,
             params = GeofenceDiagnosticsLogger.RegistrationParams(
                 initialTrigger = initialTriggerMask,
-                transitionTypes = PoznanDabrowskiegoGeofences.transitionTypesMask,
-                expirationDurationMs = PoznanDabrowskiegoGeofences.expirationDurationMs,
+                transitionTypes = PoznanGeofences.transitionTypesMask,
+                expirationDurationMs = PoznanGeofences.expirationDurationMs,
             ),
         )
 
