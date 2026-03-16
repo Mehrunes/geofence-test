@@ -1,24 +1,8 @@
 package com.example.testgeofenceplayservices.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,16 +12,8 @@ import com.example.testgeofenceplayservices.geofencing.PoznanGeofences
 import com.example.testgeofenceplayservices.ui.format.formatEventTime
 import com.example.testgeofenceplayservices.ui.theme.TestGeofencePlayServicesTheme
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.Circle
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.compose.*
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -73,8 +49,7 @@ fun GeofencingScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(text = "Geofencing: Dabrowskiego Street (Poznan)")
-        Text(text = "20 geofences in a straight line, radii 30-50 m.")
+        Text(text = "Geofencing Poznan: ${PoznanGeofences.getAllDefinitions().size}")
         Text(text = "Google Play services: $playServicesVersionText")
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -114,7 +89,10 @@ fun GeofencingScreen(
                     it.eventTimeEpochMillis == overlay.eventTimeEpochMillis
                 }
                 if (selectedEvent != null) {
-                    TriggeringLocationInfoCard(triggerEvent = selectedEvent)
+                    TriggeringLocationInfoCard(
+                        triggerEvent = selectedEvent,
+                        geofenceDefinitions = geofenceDefinitions,
+                    )
                 }
             }
 
@@ -297,9 +275,17 @@ private fun GeofencingMap(
 @Composable
 private fun TriggeringLocationInfoCard(
     triggerEvent: GeofenceTriggerEvent,
+    geofenceDefinitions: List<PoznanGeofences.GeofenceDefinition>,
     modifier: Modifier = Modifier,
 ) {
-    val geofenceIds = triggerEvent.geofenceRequestIds.joinToString(", ")
+    val geofenceText = triggerEvent.geofenceRequestIds.joinToString(", ") { requestId ->
+        val geofence = geofenceDefinitions.firstOrNull { it.requestId == requestId }
+        if (geofence == null) {
+            requestId
+        } else {
+            "$requestId (${formatLatLon(geofence.latitude, geofence.longitude)}, ${geofence.radiusMeters.roundToInt()} m)"
+        }
+    }
     Card(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -307,8 +293,11 @@ private fun TriggeringLocationInfoCard(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Text(text = "TriggeringLocation", style = MaterialTheme.typography.titleMedium)
-            Text(text = "Geofence: $geofenceIds")
+            Text(
+                text = "TriggeringLocation (${formatLatLon(triggerEvent.triggerLatitude, triggerEvent.triggerLongitude)})",
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(text = "Geofence: $geofenceText")
             Text(text = "Transition: ${triggerEvent.transition}")
             Text(text = "Time: ${formatEventTime(triggerEvent.eventTimeEpochMillis)}")
             Text(text = "Accuracy: ${"%.1f".format(Locale.US, triggerEvent.accuracyMeters)} m")
@@ -327,9 +316,15 @@ private fun GeofenceInfoCard(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Text(text = geofence.requestId, style = MaterialTheme.typography.titleMedium)
-            Text(text = "Radius: ${geofence.radiusMeters.roundToInt()} m")
-            Text(text = "Center: ${"%.6f".format(Locale.US, geofence.latitude)}, ${"%.6f".format(Locale.US, geofence.longitude)}")
+            Text(
+                text = "${geofence.requestId} (${
+                    formatLatLon(
+                        geofence.latitude,
+                        geofence.longitude
+                    )
+                }, ${geofence.radiusMeters.roundToInt()} m)",
+                style = MaterialTheme.typography.titleMedium,
+            )
             Text(
                 text = if (isLastTriggered) {
                     "Status: triggered in the latest event."
@@ -382,4 +377,8 @@ private fun transitionToMarkerHue(transition: String): Float {
         "EXIT" -> BitmapDescriptorFactory.HUE_RED
         else -> BitmapDescriptorFactory.HUE_ORANGE
     }
+}
+
+private fun formatLatLon(latitude: Double, longitude: Double): String {
+    return "lat=${"%.6f".format(Locale.US, latitude)}, lon=${"%.6f".format(Locale.US, longitude)}"
 }
