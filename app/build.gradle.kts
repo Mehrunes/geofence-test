@@ -1,9 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
 
-val mapsApiKey = (project.findProperty("MAPS_API_KEY") as String?) ?: ""
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY")
+    ?.takeIf { it.isNotBlank() }
+    ?: throw GradleException("MAPS_API_KEY property is required in local.properties to build the app.")
 
 android {
     namespace = "com.example.testgeofenceplayservices"
@@ -19,7 +30,7 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        manifestPlaceholders["MAPS_API_KEY"] = "AIzaSyAJnG619V6h4W80Y3A3nDP41IoVxrJ-fxs"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
